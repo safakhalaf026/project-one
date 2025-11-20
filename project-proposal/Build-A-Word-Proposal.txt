@@ -1,0 +1,38 @@
+Build-A-Word
+
+User Stories:
+- Once game is initialized, assign user a set of 4 letters that are randomized from hardcoded data (an array)
+- user will choose letters from an on-screen keyboard 
+- user can only use letters from the randomized set of letters
+- user can only enter 4 letter words 
+- the game will validate entered words based on the predefined word list and number of letters
+- user cant repeat words
+- user will be able to delete (clear) words
+- user must enter words under the time limit
+- user must enter all possible valid letter combinations under the time limit (30s/1min)
+- timer will start once user clicks on first letter/enters first valid word (TBD)
+- user will be able to "re-initialize" through the reset button
+- user will receive feedback on the game state 
+
+Pseudocode:
+// initialize variables
+// initialize constants
+// cache elements (game buttons and area for feedback to be displayed)
+// add event listeners for buttons
+	// one for all letter buttons
+	// one for clear button
+	// one for enter button
+	// one for reset button
+// create functions 
+	// init()
+	// render()
+	// displayFeedback()
+	// randomizeWordSelection()
+	// splitChosenWord()
+	// randomizeLetterOrder()
+	// displayLetterSet()
+	// wordValidation()
+	// handleClick()
+	
+
+
