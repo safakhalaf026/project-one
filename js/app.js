@@ -1,4 +1,3 @@
-
 /* --------------------------------------- Constants ---------------------------------------*/
 const wordsArray = [
   "abets", "baste", "betas", "beast", "beats",
@@ -62,6 +61,7 @@ const wordsArray = [
 let letterSet = []
 let currentPlayerChoice = []
 let previousPlayerChoice= []
+let currentPlayerChoiceString = ''
 
 /* ------------------------------- Cached Element References -------------------------------*/
 const letterBtnELs = document.querySelectorAll('.letters') 
@@ -71,6 +71,7 @@ const instructionsBtnEl = document.querySelector('#instructionsBtn')
 const resetBtnEl = document.querySelector('#resetBtn')
 const letterSetDisplayEl = document.querySelector('#letterSetDisplay')
 const userChoiceDisplayEl = document.querySelector('#userChoiceDisplay')
+const displayWordListEl = document.querySelector('#displayWordList')
 
 /* --------------------------------------- Functions ---------------------------------------*/
 // randomizes word from the wordsArray and splits string into an array of chars
@@ -91,34 +92,63 @@ const shuffleSplitWord = () =>{
   }
 }
 
-// format and display letterSet array 
+// format and display set of characters on browser display 
 const displayLetterSet = () => {
   const letterSetString = letterSet.join(' ').toUpperCase()
   letterSetDisplayEl.textContent = letterSetString
 }
 
-
-shuffleSplitWord()
-displayLetterSet() 
-
-// const handleLetterClick = () => {
-//   userChoiceDisplayEl.textContent = event.target.innerText
-// }
-
-const init = () => {
-  currentPlayerChoice = []
-  previousPlayerChoice= []
+// pushes and formats player choice to be displayed on browser display (limits to 5 chars)
+const handleLetterClick = (event) => { 
+  if (currentPlayerChoice.length < 5){
+    currentPlayerChoice.push(event.target.innerText)
+    currentPlayerChoiceString = currentPlayerChoice.join(' ').toUpperCase()
+    userChoiceDisplayEl.textContent = currentPlayerChoiceString
+  } else { // add popup for error
+    return
+  }
 }
 
-const show = () => {
+// clears letter entry 
+const handleClearClick = (event) => { 
+    currentPlayerChoice.pop(event.target.innerText)
+    currentPlayerChoiceString = currentPlayerChoice.join(' ').toUpperCase()
+    userChoiceDisplayEl.textContent = currentPlayerChoiceString
+}
+
+// appends user choice to list
+const appendToList = (newWord) => {
+  const newItem = document.createElement('li')
+  newItem.textContent = newWord.toUpperCase()
+  displayWordListEl.appendChild(newItem)
+  }
+
+// converts string of chars to array, reformat and push to entered words array
+const handleEnterClick = (event) => { 
+  currentPlayerChoice = currentPlayerChoiceString.split(' ').join('').toLowerCase()
+  previousPlayerChoice.push(currentPlayerChoice)
+  userChoiceDisplayEl.textContent = ''
+  appendToList(previousPlayerChoice[previousPlayerChoice.length -1])
+  currentPlayerChoice = []
+}
+
+const init = () => {
+  currentPlayerChoiceString = ''
+  currentPlayerChoice = []
+  previousPlayerChoice= []
+  shuffleSplitWord()
+  displayLetterSet() 
+}
+
+const show = (event) => {
     const tryTHis = event.target.innerText
     console.log(tryTHis)
 }
 
 /* ------------------------------------ Event Listeners ------------------------------------*/
-for (eachLetter of letterBtnELs) {eachLetter.addEventListener('click', show)}
-clearBtnEl.addEventListener('click', show)
-enterBtnEls.addEventListener('click', show)
+for (eachLetter of letterBtnELs) {eachLetter.addEventListener('click', handleLetterClick)}
+clearBtnEl.addEventListener('click', handleClearClick)
+enterBtnEls.addEventListener('click', handleEnterClick)
 instructionsBtnEl.addEventListener('click', show)
 resetBtnEl.addEventListener('click', show)
 init()
