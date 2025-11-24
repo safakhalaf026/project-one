@@ -9,20 +9,35 @@
     <title>Document</title>
 </head>
 <body>
+<div id="mainPage"></div>
+<div id="gamePage">
 <h1>Build - A - Word</h1>
-<div id="instructionsBtn"><button id>Instructions</button></div>
-<div id="letterSetDisplayContainer">
-    <p id="letterSetDisplay"></p>
+<!-- <div id="instructionsBtn"><button id>Instructions</button></div> -->
+ <div id="myPopUp">
+    <div id="myPopUpContent">
+
+    </div>
+    <button id="closePopUp"></button>
+ </div>
+ <div id="overlay" style="display: none;"></div>
+<div id="displayLetterSetContainer">
+    <p id="displayLetterSet"></p>
 </div>
-<div id="userChoiceDisplayContainer">
-    <p id="userChoiceDisplay"></p>
+<div id="displayUserChoiceContainer">
+    <p id="displayUserChoice"></p>
 </div>
 <div id="displayWordListContainer">
     <ul id="displayWordList">
     </ul>
 </div>
-<div id="resetContainer"><button id="resetBtn">Reset Game!</button></div>
-<div id="container">
+<div id="timerAndWordsLeft">
+<p id="displaySafeTimer">00:59</p>
+<p id="displayWordsLeft"></p>
+</div>
+<div id="resetContainer">
+    <button id="resetBtn">Reset Game!</button>
+</div>
+<div id="keyboardContainer">
     <div id="keyboard">
     <div class="row">
         <button class="keyButton letters" id="Q">Q</button>
@@ -59,6 +74,7 @@
         <button class="keyButton" id="enterBtn">Enter</button>
     </div>   
    </div> 
+</div>
 </div>
 </body>
 </html>

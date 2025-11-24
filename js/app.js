@@ -62,16 +62,20 @@ let letterSet = []
 let currentPlayerChoice = []
 let previousPlayerChoice= []
 let currentPlayerChoiceString = ''
+let timerStarted = false
+let timerInterval = null
+let sec = 59
 
 /* ------------------------------- Cached Element References -------------------------------*/
 const letterBtnELs = document.querySelectorAll('.letters') 
 const clearBtnEl = document.querySelector('#clearBtn')
 const enterBtnEls = document.querySelector('#enterBtn')
-const instructionsBtnEl = document.querySelector('#instructionsBtn')
 const resetBtnEl = document.querySelector('#resetBtn')
-const letterSetDisplayEl = document.querySelector('#letterSetDisplay')
-const userChoiceDisplayEl = document.querySelector('#userChoiceDisplay')
+const letterSetDisplayEl = document.querySelector('#displayLetterSet')
+const userChoiceDisplayEl = document.querySelector('#displayUserChoice')
 const displayWordListEl = document.querySelector('#displayWordList')
+const safeTimerDisplayEl = document.querySelector('#displaySafeTimer')
+const displayWordsLeftEl = document.querySelector('#displayWordsLeft')
 
 /* --------------------------------------- Functions ---------------------------------------*/
 // randomizes word from the wordsArray and splits string into an array of chars
@@ -98,41 +102,117 @@ const displayLetterSet = () => {
   letterSetDisplayEl.textContent = letterSetString
 }
 
+// timer that starts once first valid letter is clicked 
+const timer = () => {
+  if (timerStarted) return
+  timerStarted = true
+  timerInterval = setInterval(() => {
+      safeTimerDisplayEl.textContent='00:' + (sec<10 ? '0' + sec:sec)
+      sec--
+    if (sec <0){
+      clearInterval(timerInterval)
+      alert("times up")
+    }
+    },1000)
+}
+
 // pushes and formats player choice to be displayed on browser display (limits to 5 chars)
+// greys out disabled letters on click 
 const handleLetterClick = (event) => { 
+  timer()
+  if(!letterSet.join('').toUpperCase().includes(event.target.id )){
+    event.target.disabled = true
+    return
+  } 
   if (currentPlayerChoice.length < 5){
     currentPlayerChoice.push(event.target.innerText)
     currentPlayerChoiceString = currentPlayerChoice.join(' ').toUpperCase()
     userChoiceDisplayEl.textContent = currentPlayerChoiceString
-  } else { // add popup for error
-    return
+  }
+}
+
+// returns all possible word combinations from wordsArray
+const allPossibleWords = () => {
+  const sortWords = letterSet.slice().sort().join('')
+  return wordsArray.filter(word => {
+    return word.split('').sort().join('') === sortWords
+  })
+}
+
+// displays how many word combinations are left
+const updateWordsLeft = () => {
+  const totalWords = allPossibleWords().length
+  const foundWords = previousPlayerChoice.length
+  const remainingWords = totalWords - foundWords
+  displayWordsLeftEl.textContent = `Words left: ${remainingWords}`
+}
+
+// checks if all valid words have been entered
+const checkIfEntered = () => {
+  const allWords = allPossibleWords()
+  if (previousPlayerChoice.length === allWords.length){
+    alert("all words have been found")
+    clearInterval(timerInterval)
+    timerStarted=false
   }
 }
 
 // clears letter entry 
-const handleClearClick = (event) => { 
-    currentPlayerChoice.pop(event.target.innerText)
-    currentPlayerChoiceString = currentPlayerChoice.join(' ').toUpperCase()
-    userChoiceDisplayEl.textContent = currentPlayerChoiceString
+const handleClearClick = (event) => {
+  currentPlayerChoice.pop(event.target.innerText)
+  currentPlayerChoiceString = currentPlayerChoice.join(' ').toUpperCase()
+  userChoiceDisplayEl.textContent = currentPlayerChoiceString
+}
+
+// validates entered word based on conditions before appending to viewport
+const wordValidation = () => {
+  currentPlayerChoiceString = currentPlayerChoiceString.split(' ').join('').toLowerCase()
+  if (!wordsArray.includes(currentPlayerChoiceString)){
+    return {valid: false, reason: "NOT IN WORD LIST"}
+  }if (previousPlayerChoice.includes(currentPlayerChoiceString)){
+    return {valid: false, reason: "WORD ALREADY ENTERED"}
+  }
+  return {valid: true, word: currentPlayerChoiceString}
 }
 
 // appends user choice to list
-const appendToList = (newWord) => {
+const appendToList = (addedWord) => {
   const newItem = document.createElement('li')
-  newItem.textContent = newWord.toUpperCase()
+  newItem.textContent = addedWord.toUpperCase()
   displayWordListEl.appendChild(newItem)
   }
 
 // converts string of chars to array, reformat and push to entered words array
 const handleEnterClick = (event) => { 
   currentPlayerChoice = currentPlayerChoiceString.split(' ').join('').toLowerCase()
-  previousPlayerChoice.push(currentPlayerChoice)
-  userChoiceDisplayEl.textContent = ''
+  const result = wordValidation()
+  if (!result.valid){
+    alert(result.reason)
+    userChoiceDisplayEl.textContent = ''
+    currentPlayerChoice = []
+    return 
+  }
+  previousPlayerChoice.push(result.word)
   appendToList(previousPlayerChoice[previousPlayerChoice.length -1])
+  userChoiceDisplayEl.textContent = ''
   currentPlayerChoice = []
+  updateWordsLeft()
+  checkIfEntered() 
 }
 
+// initalizes landing page to default state
 const init = () => {
+  letterBtnELs.forEach(btn => {
+    btn.disabled = false
+    btn.classList.remove('disabled')
+  })
+  clearInterval(timerInterval)
+  sec = 59
+  timerStarted = false
+  safeTimerDisplayEl.textContent = '00:59'
+  displayWordListEl.textContent = ''
+  userChoiceDisplayEl.textContent = ''
+  displayWordsLeftEl.textContent = ''
   currentPlayerChoiceString = ''
   currentPlayerChoice = []
   previousPlayerChoice= []
@@ -140,15 +220,9 @@ const init = () => {
   displayLetterSet() 
 }
 
-const show = (event) => {
-    const tryTHis = event.target.innerText
-    console.log(tryTHis)
-}
-
 /* ------------------------------------ Event Listeners ------------------------------------*/
 for (eachLetter of letterBtnELs) {eachLetter.addEventListener('click', handleLetterClick)}
 clearBtnEl.addEventListener('click', handleClearClick)
 enterBtnEls.addEventListener('click', handleEnterClick)
-instructionsBtnEl.addEventListener('click', show)
-resetBtnEl.addEventListener('click', show)
+resetBtnEl.addEventListener('click', init)
 init()
