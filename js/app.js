@@ -76,6 +76,9 @@ const userChoiceDisplayEl = document.querySelector('#displayUserChoice')
 const displayWordListEl = document.querySelector('#displayWordList')
 const safeTimerDisplayEl = document.querySelector('#displaySafeTimer')
 const displayWordsLeftEl = document.querySelector('#displayWordsLeft')
+// const myPopUpTitleEl = document.querySelector('#myPopUpTitle')
+// const myPopUpTextEl = document.querySelector('#myPopUpText')
+// const closePopUpEl = document.querySelector('#closePopUp')
 
 /* --------------------------------------- Functions ---------------------------------------*/
 // randomizes word from the wordsArray and splits string into an array of chars
