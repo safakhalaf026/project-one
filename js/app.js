@@ -76,9 +76,10 @@ const userChoiceDisplayEl = document.querySelector('#displayUserChoice')
 const displayWordListEl = document.querySelector('#displayWordList')
 const safeTimerDisplayEl = document.querySelector('#displaySafeTimer')
 const displayWordsLeftEl = document.querySelector('#displayWordsLeft')
-// const myPopUpTitleEl = document.querySelector('#myPopUpTitle')
-// const myPopUpTextEl = document.querySelector('#myPopUpText')
-// const closePopUpEl = document.querySelector('#closePopUp')
+const myPopUpEl = document.querySelector('#myPopUp')
+const myPopUpTitleEl = document.querySelector('#myPopUpTitle')
+const myPopUpTextEl = document.querySelector('#myPopUpText')
+const closePopUpEl = document.querySelector('#closePopUp')
 
 /* --------------------------------------- Functions ---------------------------------------*/
 // randomizes word from the wordsArray and splits string into an array of chars
@@ -103,6 +104,18 @@ const shuffleSplitWord = () =>{
 const displayLetterSet = () => {
   const letterSetString = letterSet.join(' ').toUpperCase()
   letterSetDisplayEl.textContent = letterSetString
+}
+
+// display pop-up based on given parameters
+const showPopUp = (title, text) => {
+  myPopUpEl.style.display = 'block'
+  myPopUpTitleEl.textContent = title
+  myPopUpTextEl.textContent = text
+}
+
+// hide pop-up 
+const closePopUp = () => {
+  myPopUpEl.style.display = 'none'
 }
 
 // timer that starts once first valid letter is clicked 
@@ -227,5 +240,6 @@ const init = () => {
 for (eachLetter of letterBtnELs) {eachLetter.addEventListener('click', handleLetterClick)}
 clearBtnEl.addEventListener('click', handleClearClick)
 enterBtnEls.addEventListener('click', handleEnterClick)
+closePopUpEl.addEventListener('click', closePopUp)
 resetBtnEl.addEventListener('click', init)
 init()
