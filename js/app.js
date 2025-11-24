@@ -107,10 +107,11 @@ const displayLetterSet = () => {
 }
 
 // display pop-up based on given parameters
-const showPopUp = (title, text) => {
+const showPopUp = (title, text, button) => {
   myPopUpEl.style.display = 'block'
   myPopUpTitleEl.textContent = title
   myPopUpTextEl.textContent = text
+  closePopUpEl.textContent = button
 }
 
 // hide pop-up 
@@ -127,7 +128,7 @@ const timer = () => {
       sec--
     if (sec <0){
       clearInterval(timerInterval)
-      alert("times up")
+      showPopUp('Time is up!!', 'You lost, try again?', 'play again')
     }
     },1000)
 }
@@ -167,28 +168,26 @@ const updateWordsLeft = () => {
 const checkIfEntered = () => {
   const allWords = allPossibleWords()
   if (previousPlayerChoice.length === allWords.length){
-    alert("all words have been found")
-    clearInterval(timerInterval)
-    timerStarted=false
+    showPopUp('You won!!', 'All words have been found and you won', 'play again?')
+    init()
   }
 }
 
 // clears letter entry 
 const handleClearClick = (event) => {
-  currentPlayerChoice.pop(event.target.innerText)
+  currentPlayerChoice.pop()
   currentPlayerChoiceString = currentPlayerChoice.join(' ').toUpperCase()
   userChoiceDisplayEl.textContent = currentPlayerChoiceString
 }
 
 // validates entered word based on conditions before appending to viewport
-const wordValidation = () => {
-  currentPlayerChoiceString = currentPlayerChoiceString.split(' ').join('').toLowerCase()
-  if (!wordsArray.includes(currentPlayerChoiceString)){
-    return {valid: false, reason: "NOT IN WORD LIST"}
-  }if (previousPlayerChoice.includes(currentPlayerChoiceString)){
-    return {valid: false, reason: "WORD ALREADY ENTERED"}
+const wordValidation = (word) => {
+  if (!wordsArray.includes(word)){
+    return {valid: false, reason: "Not in word list"}
+  }if (previousPlayerChoice.includes(word)){
+    return {valid: false, reason: "word already entered"}
   }
-  return {valid: true, word: currentPlayerChoiceString}
+  return {valid: true, word: word}
 }
 
 // appends user choice to list
@@ -200,10 +199,10 @@ const appendToList = (addedWord) => {
 
 // converts string of chars to array, reformat and push to entered words array
 const handleEnterClick = (event) => { 
-  currentPlayerChoice = currentPlayerChoiceString.split(' ').join('').toLowerCase()
-  const result = wordValidation()
+  let enteredWord = currentPlayerChoiceString.split(' ').join('').toLowerCase()
+  const result = wordValidation(enteredWord)
   if (!result.valid){
-    alert(result.reason)
+    showPopUp('Oops!!', result.reason, 'close')
     userChoiceDisplayEl.textContent = ''
     currentPlayerChoice = []
     return 
@@ -233,7 +232,7 @@ const init = () => {
   currentPlayerChoice = []
   previousPlayerChoice= []
   shuffleSplitWord()
-  displayLetterSet() 
+  displayLetterSet()
 }
 
 /* ------------------------------------ Event Listeners ------------------------------------*/
