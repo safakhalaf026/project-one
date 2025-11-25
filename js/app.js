@@ -229,6 +229,7 @@ const init = () => {
   userChoiceDisplayEl.textContent = ''
   displayWordsLeftEl.textContent = ''
   currentPlayerChoiceString = ''
+  myPopUpEl.style.display = 'none'
   currentPlayerChoice = []
   previousPlayerChoice= []
   shuffleSplitWord()
