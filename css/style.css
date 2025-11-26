@@ -18,6 +18,10 @@ h1{
     justify-content: center;
 }
 
+li{
+    list-style-type: none;
+}
+
 #mainPage{
     position: fixed;
     min-height: 100vh;
@@ -29,6 +33,7 @@ h1{
 }
 
 #instructionsContainer{
+    font-family: Inter, Poppins, sans-serif;
     width: 900px;
     height: 500px;
     background-color:rgb(174, 131, 175);
@@ -39,13 +44,34 @@ h1{
     padding: 5px;
     margin: 50px auto;
     display: flex;
+    flex-direction: column;
+}
+
+#instructionsContent{
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#instructionsContent h2{
+    margin-bottom: 30px;
+}
+
+#instructionsContent li{
+    margin: 10px;
+    display: flex;
     justify-content: center;
 }
 
+#instructionsContent button{
+    margin-top: 30px;
+}
 #gamePage{
+    height: 100vh;
     background-color: rgb(174, 131, 175);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
 }
 #myPopUp{
     display: none;
@@ -63,7 +89,7 @@ h1{
 #myPopUpContent{
     border: 1.5px solid rgb(51, 13, 103);
     box-shadow: 5px 5px 10px rgb(77, 28, 77);
-    background-color: rgb(192, 173, 193);
+    background-color: rgb(174, 131, 175);
     margin: 14vw auto;
     padding: 10px 40px 10px 40px;
     border-radius: 5px;
@@ -76,15 +102,15 @@ h1{
 }
 
 #myPopUpContent h3{
-    margin: 0 0 3px 0;
+    margin: 0 0 7px 0;
 }
 
 #myPopUpContent p{
-    margin: 0 0 3px 0;
+    margin: 0 0 7px 0;
 }
 
 #myPopUpContent button{
-    margin: 3px 0 0 0;
+    margin: 7px 0 0 0;
 }
 
 #displayLetterSet{
@@ -110,7 +136,7 @@ h1{
 }
 
 #displayWordList li{
-    list-style-type: none;
+    /* list-style-type: none; */
     font-size: 15px;
     font-weight: 550;
     display: flex;
@@ -144,7 +170,7 @@ h1{
 
 #displaySafeTimer{
     border: 1.5px solid rgb(51, 13, 103);
-    background-color: rgb(229, 187, 133);
+    background-color: rgb(236, 205, 163);
     box-shadow: 5px 5px 10px rgb(77, 28, 77); 
     border-radius: 5px;
     padding: 10px;
@@ -153,7 +179,7 @@ h1{
 
 #displayWordsLeft{
     border: 1.5px solid rgb(51, 13, 103);
-    background-color: rgb(229, 187, 133);
+    background-color: rgb(236, 205, 163);
     box-shadow: 5px 5px 10px rgb(77, 28, 77); 
     border-radius: 5px;
     padding: 10px;
@@ -216,8 +242,8 @@ h1{
     outline: none;
     margin-top: 5px;
     border-radius: 5px;
-    color: rgb(229, 187, 133);
-    border: 1px solid rgb(229, 187, 133);
+    color: rgb(236, 205, 163);
+    border: 1px solid rgb(236, 205, 163);
     background-color: rgb(51, 13, 103);
     box-shadow: 5px 5px 10px rgb(77, 28, 77); 
     font-weight: 500;
@@ -237,7 +263,7 @@ h1{
     color:rgb(51, 13, 103);
     border: 1.5px solid rgb(51, 13, 103);
     outline: none;
-    background-color: rgb(229, 187, 133);
+    background-color: rgb(236, 205, 163);
     box-shadow: 5px 5px 10px rgb(77, 28, 77);
     cursor: pointer;
 }

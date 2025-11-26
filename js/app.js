@@ -57,6 +57,16 @@ const wordsArray = [
   "skate", "stake", "steak", "takes", "teaks",
   "state", "taste", "teats"]
 
+  const defaults = {
+  spread: 360,
+  ticks: 50,
+  gravity: 0,
+  decay: 0.94,
+  startVelocity: 30,
+  shapes: ["star"],
+  colors: ["7C3AED", "A78BFA", "C4B5FD", "E9D8FD", "F5E6CC", "DECBB7"],
+}
+
 /* --------------------------------------- Variables ---------------------------------------*/
 let letterSet = []
 let currentPlayerChoice = []
@@ -67,6 +77,9 @@ let timerInterval = null
 let sec = 59
 
 /* ------------------------------- Cached Element References -------------------------------*/
+const mainPageEl = document.querySelector('#mainPage')
+const startGameBtnEl = document.querySelector('#startGameBtn')
+const gamePageEl = document.querySelector('#gamePage')
 const letterBtnELs = document.querySelectorAll('.letters') 
 const clearBtnEl = document.querySelector('#clearBtn')
 const enterBtnEl = document.querySelector('#enterBtn')
@@ -84,6 +97,12 @@ const displayUserChoiceContainerEl = document.querySelector('#displayUserChoiceC
 const displayWordListContainerEL = document.querySelector('#displayWordListContainer')
 
 /* --------------------------------------- Functions ---------------------------------------*/
+const showPage = () => {
+  timer()
+  gamePageEl.classList.remove('hiddenContainer')
+  mainPageEl.classList.add('hiddenContainer')
+}
+
 // randomizes word from the wordsArray and splits string into an array of chars
 const randomizeWordSelection = () =>{
   const randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)]
@@ -117,8 +136,9 @@ const showPopUp = (title, text, button) => {
 }
 
 // hide pop-up 
-const closePopUp = () => {
+const closePopUp = (event) => {
   myPopUpEl.style.display = 'none'
+  if(event.target.textContent === "play again?") resetGame()
 }
 
 // timer that starts once first valid letter is clicked 
@@ -130,7 +150,8 @@ const timer = () => {
       sec--
     if (sec <0){
       clearInterval(timerInterval)
-      showPopUp('Time is up!!', 'You lost, try again?', 'play again')
+      showPopUp('Time is up!!', 'You lost, try again?', 'play again?')
+      // init()
     }
     },1000)
 }
@@ -138,7 +159,6 @@ const timer = () => {
 // pushes and formats player choice to be displayed on browser display (limits to 5 chars)
 // greys out disabled letters on click 
 const handleLetterClick = (event) => { 
-  timer()
   if(!letterSet.join('').toUpperCase().includes(event.target.id )){
     event.target.disabled = true
     return
@@ -173,10 +193,7 @@ const checkIfEntered = () => {
   const allWords = allPossibleWords()
   if (previousPlayerChoice.length === allWords.length){
     showPopUp('You won!!', 'All words have been found and you won', 'play again?')
-    closePopUpEl.onclick = () => {
-        closePopUp()
-        init()
-      }
+    shoot()
   }
 }
 
@@ -228,7 +245,34 @@ const handleEnterClick = (event) => {
   checkIfEntered() 
 }
 
-// initalizes landing page to default state
+// confetti function (code provided from confetti.js.org)
+function shoot() {
+  confetti({
+    ...defaults,
+    particleCount: 40,
+    scalar: 1.2,
+    shapes: ["star"],
+  });
+
+  confetti({
+    ...defaults,
+    particleCount: 10,
+    scalar: 0.75,
+    shapes: ["circle"],
+  });
+}
+
+setTimeout(shoot, 0);
+setTimeout(shoot, 100);
+setTimeout(shoot, 200);
+
+// resets game to default state through button
+const resetGame = () =>{
+  init()
+  timer()
+}
+
+// initalizes defualt state
 const init = () => {
   letterBtnELs.forEach(btn => {
     btn.disabled = false
@@ -253,9 +297,10 @@ const init = () => {
 }
 
 /* ------------------------------------ Event Listeners ------------------------------------*/
+startGameBtnEl.addEventListener('click', showPage, timer)
 for (eachLetter of letterBtnELs) {eachLetter.addEventListener('click', handleLetterClick)}
 clearBtnEl.addEventListener('click', handleClearClick)
 enterBtnEl.addEventListener('click', handleEnterClick)
 closePopUpEl.addEventListener('click', closePopUp)
-resetBtnEl.addEventListener('click', init)
+resetBtnEl.addEventListener('click', resetGame)
 init()
