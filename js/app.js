@@ -264,10 +264,6 @@ function shoot() {
   });
 }
 
-setTimeout(shoot, 0);
-setTimeout(shoot, 100);
-setTimeout(shoot, 200);
-
 // resets game to default state through button
 const resetGame = () =>{
   init()
